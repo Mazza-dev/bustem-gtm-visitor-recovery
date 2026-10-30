@@ -1,0 +1,4 @@
+visitor_id,source,brand,requester,stage,report_finding,contact_review,follow_up,outcome
+sample_anon_001,paid_social,,,form_abandoned,,not_possible,none,unknown
+sample_brand_001,direct,northstar-demo.example,Avery Morgan,report_quiet,"Fictional example: lookalike storefront copied product imagery",fictional_demo_contact,draft_ready,no_reply
+sample_brand_002,referral,northstar-demo.example,Casey Reed,returned,"Fictional example: copied product listing",fictional_demo_contact,reviewed,conversation

@@ -1,0 +1,27 @@
+{
+  "name": "Bustem GTM 1 visitor recovery",
+  "version": 1,
+  "description": "Event contract and decision rules used by the demo. Report delivery is a separate manual or verified integration event, never inferred from form submission.",
+  "eventEndpoint": "POST /api/gtm",
+  "reportDeliveryAction": "report_delivery",
+  "crmOutcomeAction": "outcome",
+  "visitorKey": "visitorId",
+  "events": ["page_view", "cta_click", "form_view", "form_start", "form_submit", "report_sent", "report_viewed", "return_visit", "conversation", "customer"],
+  "rules": {
+    "formAbandonedAfterMinutes": 2,
+    "reportQuietAfterMinutes": 2,
+    "productionSuggestedDelayHours": 24
+  },
+  "actions": {
+    "formAbandoned": "Count drop-off; do not contact an anonymous visitor",
+    "reportQuiet": "Find public company contacts for review and prepare a report-specific follow-up draft",
+    "returned": "Remove the account from the quiet-report queue",
+    "replied": "Mark conversation and stop quiet-report follow-up"
+  },
+  "integrationPoints": {
+    "landingAndForm": "Send first-party events from the real website and form",
+    "report": "Record report_sent manually or from a verified report log with recipient, sent time, report URL, and finding",
+    "enrichment": "Replace public-site lookup with an approved data provider if available",
+    "outreach": "Review and send drafts through an approved CRM or email system"
+  }
+}
