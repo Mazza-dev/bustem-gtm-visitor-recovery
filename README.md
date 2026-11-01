@@ -1,32 +1,30 @@
-# Bustem visitor recovery demo
+# Bustem GTM 1: visitor and report follow up demo
 
-An independent, working GTM 1 prototype by Tolani Lambe. It follows a visitor from an audit request to a manually recorded report, then flags reports that receive no recorded return or conversation. It uses fictional data by default. No scan, email, or outreach is sent.
+This is a demo of a proposed workflow for Bustem. It shows what could happen after someone visits a page, requests a scan, receives a report, and does not come back. It is not connected to Bustem's website, visitor identification tool, scan process, CRM, or messaging accounts. The example brand, report finding, and contact are fictional.
 
-This is an application sample, not a Bustem integration. The [integration map](docs/INTEGRATIONS.md) shows where their existing tools could connect without code and where a small adapter or authorized access would be needed.
+## What the demo shows
 
-## Try it
+| Step | What works here | What is simulated or missing |
+| --- | --- | --- |
+| Visit and form activity | The demo page records page views, form views, form starts, and submissions against a browser visitor ID. The operator view counts these events. | The tracking script is not installed on Bustem's site. A browser visitor ID does not reveal a person's name or company. No visitor identification provider is connected. |
+| Scan request | The sample form stores a request with a name, email, phone number, and brand URL. | This is not Bustem's form. Submitting it does not start a Bustem scan. |
+| Report delivery | An operator can mark a report as sent and record a finding and report URL. The API can also receive a delivery event from a future integration. | The demo does not create or send a real report. The sample finding is fictional. Bustem's actual delivery process has not been connected or confirmed. |
+| No return after delivery | The operator queue identifies a submitted request whose report was marked sent but has no recorded return or conversation. | The demo uses a two minute delay and a button that advances the example. The queue is calculated when the app is read. A live delay, return tracking, and task delivery need a connected workflow. |
+| People at the company | The app can read a few public pages on the submitted company site and collect LinkedIn profile links found there. | It does not identify every decision maker, verify anyone's role, or prove that an employee visited the page. The fictional example inserts a clearly labelled sample contact. A person must verify any suggested contact. |
+| Follow up | The app prepares a draft using the recorded report finding. An operator can record a follow up state. | It does not send email, LinkedIn messages, or calls. No outreach account is connected. |
 
-1. Run `npm ci`, `npm run build`, and `npm run db:local:init` once. Then start with `npm run dev`.
-2. Open the local `/demo` page. Choose **Fill fictional example** and submit the request.
-3. Choose **Mark sample report sent**. This is a distinct step because report delivery may be manual.
-4. Choose **Advance two minutes** to see the quiet report queue. The production delay is configurable and should be agreed with Bustem.
-5. Open the sample report to record a return. The quiet report item then disappears.
-6. The operator view at `/` shows the funnel, account, review of decision makers, and follow up draft.
+## Try the example
 
-The demo also lets an operator record a report as sent from the account view. A sample [manual report log](public/manual-report-log-template.csv) shows how a spreadsheet could feed the same event. This is an integration option, not a claim that Bustem currently uses a spreadsheet.
+1. Run `npm ci`, `npm run build`, and `npm run db:local:init` once. Then run `npm run dev`.
+2. Open `/demo`, choose **Fill fictional example**, and submit the request.
+3. Choose **Mark sample report sent**, then **Advance two minutes**. The follow up queue appears.
+4. Open the sample report to record a return. The quiet report item disappears.
+5. Open `/` to see the operator view, account record, suggested contact, and draft.
 
-## What is real in the prototype
+The sample [report log](public/manual-report-log-template.csv) is one possible way to record manual delivery. It is not evidence that Bustem currently uses a spreadsheet. The [workflow template](public/workflow-template.json) describes the demo events and rules. The [integration map](docs/INTEGRATIONS.md) lists possible connections that Bustem would need to confirm.
 
-- Page and form events, account records, funnel counts, and a follow up queue.
-- A report sent step that can be recorded manually or posted by an authorized integration.
-- Rules that distinguish anonymous form abandonment from an identified report recipient. Anonymous visitors are measured, not contacted.
-- Draft based on the report text that stays in review. The app does not send messages.
-- A limited public company site lookup. Any person it suggests requires verification. The fictional sample contact is labeled as such.
+## What would be needed for Bustem to use it
 
-The app's `POST /api/gtm` event contract and rules are in [workflow-template.json](public/workflow-template.json). The **two minute** demo rule is deliberately short; the template suggests a 24 hour production delay. The Claude skill at [.claude/skills/bustem-visitor-recovery/SKILL.md](.claude/skills/bustem-visitor-recovery/SKILL.md) helps an operator use and adapt the workflow. The app works without Claude.
+Bustem would need to confirm its actual form, scan delivery method, CRM, and visitor identification setup. Those systems would then need authorized event feeds or webhooks. A live version also needs authentication, webhook verification, duplicate handling, an agreed follow up delay, and a way to record actual returns and conversations. Company matches should remain separate from claims about the identity of an individual visitor.
 
-## Before any live connection
-
-The current API and operator view are a **demo**, not a production endpoint. Protect them with authentication and verify inbound webhook signatures before sending real customer records. Get Bustem's permission and access to its actual form, report process, and CRM. Do not put credentials or customer data in this repository.
-
-The [integration map](docs/INTEGRATIONS.md) explains how to connect the workflow once Bustem confirms its tools and report process. The spreadsheet path is an option, not a claim about their current process.
+The current API and operator view are demonstration endpoints. Do not send real customer records to them or put credentials in this repository.
